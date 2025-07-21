@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TimeCraft Watch Emporium</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6.5' fill='%230066cc' stroke='%23e60000' stroke-width='0.5'/%3E%3Ctext x='8' y='8.5' font-family='Arial' font-size='4' text-anchor='middle' fill='white'%3EC%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f8f8;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+      color: white;
+      text-align: center;
+      padding: 20px 10px;
+      font-size: 24px;
+      letter-spacing: 1px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+    }
+
+    /* Navigation */
+    nav {
+      background: #222;
+      padding: 15px 0;
+    }
+    
+    nav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      gap: 30px;
+    }
+    
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      transition: color 0.3s;
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+    
+    nav a:hover {
+      color: #ffd700;
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* Hero section */
+    .hero {
+      height: 90vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+    }
+
+    .hero-content {
+      width: 50%;
+      padding: 0 5%;
+      z-index: 2;
+    }
+
+    .hero-content h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      color: #222;
+      line-height: 1.2;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #555;
+      max-width: 80%;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 15px 30px;
+      background: linear-gradient(135deg, #000000 0%, #333333 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .cta-button:hover {
+      background: linear-gradient(135deg, #333333 0%, #000000 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Watch slideshow */
+    .watch-slideshow {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 60%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .watch-slideshow img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+      transform: scale(1.1);
+    }
+
+    .watch-slideshow img.active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 1;
+    }
+
+    /* Main content */
+    main {
+      padding: 40px 0;
+      background: #fff;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin: 40px 0;
+      color: #222;
+      font-family: 'Montserrat', sans-serif;
+      position: relative;
+    }
+    
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #000000, #ffd700);
+      margin: 15px auto;
+      border-radius: 2px;
+    }
+
+    .watch-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      padding: 30px 5%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .watch-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      width: 280px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid #eee;
+    }
+
+    .watch-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+    }
+
+    .watch-card img {
+      width: 80%;
+      height: 220px;
+      object-fit: contain;
+      padding: 20px 0;
+      transition: transform 0.3s ease;
+    }
+    
+    .watch-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .watch-info {
+      padding: 20px;
+      text-align: center;
+      width: 100%;
+      border-top: 1px solid #f0f0f0;
+      background: #fafafa;
+    }
+
+    .watch-info h3 {
+      margin: 10px 0 5px;
+      font-size: 1.3rem;
+      color: #111;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .watch-info p {
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 15px;
+      min-height: 60px;
+    }
+
+    .price {
+      color: #d00000;
+      font-size: 1.3rem;
+      margin: 10px 0;
+      font-weight: 700;
+    }
+
+    .buy-btn {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 12px 25px;
+      background: linear-gradient(135deg, #000000 0%, #333333 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      width: 80%;
+      max-width: 200px;
+    }
+
+    .buy-btn:hover {
+      background: linear-gradient(135deg, #333333 0%, #000000 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* Features section */
+    .features {
+      background: #f9f9f9;
+      padding: 60px 5%;
+      text-align: center;
+    }
+    
+    .features-grid {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .feature-card {
+      flex: 1;
+      min-width: 250px;
+      max-width: 300px;
+      padding: 30px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #000;
+    }
+    
+    .feature-card h3 {
+      margin-bottom: 15px;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+      color: white;
+      padding: 50px 5% 30px;
+      text-align: center;
+    }
+    
+    .footer-content {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto 30px;
+      gap: 30px;
+      text-align: left;
+    }
+    
+    .footer-column {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .footer-column h3 {
+      margin-bottom: 20px;
+      font-family: 'Montserrat', sans-serif;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .footer-column h3::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40px;
+      height: 2px;
+      background: #ffd700;
+    }
+    
+    .footer-column ul {
+      list-style: none;
+    }
+    
+    .footer-column li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-column a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-column a:hover {
+      color: #ffd700;
+    }
+    
+    .copyright {
+      padding-top: 30px;
+      border-top: 1px solid #333;
+      margin-top: 30px;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .hero-content h1 {
+        font-size: 2.8rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        flex-direction: column;
+        height: auto;
+        padding: 100px 0 50px;
+      }
+      
+      .hero-content {
+        width: 100%;
+        padding: 2rem;
+        text-align: center;
+      }
+      
+      .hero-content p {
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .watch-slideshow {
+        position: relative;
+        width: 100%;
+        height: 400px;
+        margin-top: 30px;
+      }
+      
+      nav ul {
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-content h1 {
+        font-size: 2.2rem;
+      }
+      
+      .hero-content p {
+        font-size: 1rem;
+      }
+      
+      .cta-button {
+        padding: 12px 25px;
+      }
+      
+      .watch-card {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  TimeCraft Watch Emporium
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#collections">Collections</a></li>
+    <li><a href="#men">Men's Watches</a></li>
+    <li><a href="#women">Women's Watches</a></li>
+    <li><a href="#kids">Kids' Watches</a></li>
+    <li><a href="#about">About Us</a></li>
+  </ul>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero" id="home">
+  <div class="hero-content">
+    <h1>Craft Your Time in Style</h1>
+    <p>Discover exquisite watches from the world's finest brands. Precision, elegance, and innovation for every wrist.</p>
+    <a href="#collections" class="cta-button">Explore Collections</a>
+  </div>
+  
+  <div class="watch-slideshow">
+    <!-- Images will be added via JavaScript -->
+  </div>
+</section>
+
+<!-- Main Content -->
+<main>
+  <section id="collections">
+    <h2 class="section-title">Our Collections</h2>
+    
+    <div id="men" class="section-title">Premium Men's Watches</div>
+    <div class="watch-grid">
+      <div class="watch-card">
+        <img src="https://www.citychain.com.hk/cdn/shop/files/5697968588099621884.jpg?v=1724059405" alt="Casio Men's Watch">
+        <div class="watch-info">
+          <h3>Casio Classic Chronograph</h3>
+          <p>Elegant stainless steel strap, 100m waterproof, date display and stopwatch functionality.</p>
+          <div class="price">$129.99</div>
+          <a href="#" class="buy-btn">Add to Cart</a>
+        </div>
+      </div>
+
+      <div class="watch-card">
+        <img src="https://watchlocker.ng/wp-content/uploads/2024/05/Invicta-47271.jpg" alt="Men's Luxury Watch">
+        <div class="watch-info">
+          <h3>Invicta Pro Diver</h3>
+          <p>Professional diver's watch with luminous hands, unidirectional bezel, and 200m water resistance.</p>
+          <div class="price">$249.99</div>
+          <a href="#" class="buy-btn">Add to Cart</a>
+        </div>
+      </div>
+      
+      <div class="watch-card">
+        <img src="https://m.media-amazon.com/images/I/71O+r+9mWmL._AC_UF1000,1000_QL80_.jpg" alt="Men's Dress Watch">
+        <div class="watch-info">
+          <h3>Fossil Grant Leather</h3>
+          <p>Classic leather strap dress watch with skeleton back showing mechanical movement.</p>
+          <div class="price">$179.99</div>
+          <a href="#" class="buy-btn">Add to Cart</a>
+        </div>
+      </div>
+      
+      <div class="watch-card">
+        <img src="https://m.media-amazon.com/images/I/71O3h+QqURL._AC_UF1000,1000_QL80_.jpg" alt="Men's Smart Watch">
+        <div class="watch-info">
+          <h3>Garmin Venu Sq</h3>
+          <p>Smartwatch with GPS, health monitoring, and up to 6 days battery life.</p>
+          <div class="price">$199.99</div>
+          <a href="#" class="buy-btn">Add to Cart</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="women" class="section-title">Elegant Women's Watches</div>
+    <div class="watch-grid">
+      <div class="watch-card">
+        <img src="https://m.media-amazon.com/images/I/71yZQZQZQZL._AC_UF1000,1000_QL80_.jpg" alt="Women's Gold Watch">
+        <div class="watch-info">
+          <h3>Anne Klein Gold-Tone</h3>
+          <p>Stylish, slim design, gold finish with quartz movement and crystal accents.</p>
+          <div class="price">$89.99</div>
+          <a href="#" class="buy-btn">Add to Cart</a>
+        </div>
+      </div>
+      
+      <div class="watch-card">
+        <img src="https://m.media-amazon.com/images/I/71O+r+9mWmL._AC_UF1000,1000_QL80_.jpg" alt="Women's Rose Gold Watch">
+        <div class="watch-info">
+          <h3>Michael Kors Parker</h3>
+          <p>Rose gold-tone stainless steel with mother-of-pearl dial and Swarovski crystals.</p>
+          <div class="price">$159.99</div>
+          <a href="#" class="buy-btn">Add to Cart</a>
+        </div>
+      </div>
+      
+      <div class="watch-card">
+        <img src="https://m.media-amazon.com/images/I/71O3h+QqURL._AC_UF1000,1000_QL80_.jpg" alt="Women's Smart Watch">
+        <div class="watch-info">
+          <h3>Fitbit Versa 3</h3>
+          <p>Health & fitness smartwatch with GPS, heart rate tracking, and Alexa built-in.</p>
+          <div class="price">$179.99</div>
+          <a href="#" class="buy-btn">Add to Cart</a>
+        </div>
+      </div>
+      
+      <div class="watch-card">
+        <img src="https://m.media-amazon.com/images/I/71yZQZQZQZL._AC_UF1000,1000_QL80_.jpg" alt="Women's Diamond Watch">
+        <div class="watch-info">
+          <h3>Citizen Eco-Drive</h3>
+          <p>Solar-powered watch with diamond accents and date display, never needs a battery.</p>
+          <div class="price">$229.99</div>
+          <a href="#" class="buy-btn">Add to Cart</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="kids" class="section-title">Fun Kids Watches</div>
+    <div class="watch-grid">
+      <div class="watch-card">
+        <img src="https://shop.myxplora.com/cdn/shop/files/Amazon-XGO3-Pink-Zebra-Blue-Elephant-Black-Panther-UK_a58e60d3-df33-4f98-add5-67156d7abc56_298x298_crop_center.jpg?v=1748007636" alt="Kids Watch">
+        <div class="watch-info">
+          <h3>Xplora XGO3</h3>
+          <p>Colorful kids smartwatch with GPS tracking, step counter, and parent-controlled calls.</p>
+          <div class="price">$99.99</div>
+          <a href="#" class="buy-btn">Add to Cart</a>
+        </div>
+      </div>
+
+      <div class="watch-card">
+        <img src="https://ng.jumia.is/unsafe/fit-in/680x680/filters:fill(white)/product/20/9135762/1.jpg?8622" alt="Kids Smartwatch">
+        <div class="watch-info">
+          <h3>VTech Kidizoom</h3>
+          <p>Interactive smartwatch with camera, games, and creativity apps for kids.</p>
+          <div class="price">$49.99</div>
+          <a href="#" class="buy-btn">Add to Cart</a>
+        </div>
+      </div>
+      
+      <div class="watch-card">
+        <img src="https://m.media-amazon.com/images/I/71O+r+9mWmL._AC_UF1000,1000_QL80_.jpg" alt="Kids Digital Watch">
+        <div class="watch-info">
+          <h3>Timex Kids Digital</h3>
+          <p>Durable digital watch with Indiglo night-light, alarm, and 50m water resistance.</p>
+          <div class="price">$29.99</div>
+          <a href="#" class="buy-btn">Add to Cart</a>
+        </div>
+      </div>
+      
+      <div class="watch-card">
+        <img src="https://m.media-amazon.com/images/I/71O3h+QqURL._AC_UF1000,1000_QL80_.jpg" alt="Kids Character Watch">
+        <div class="watch-info">
+          <h3>Disney Frozen Watch</h3>
+          <p>Official Frozen themed watch with Anna & Elsa design, perfect for young fans.</p>
+          <div class="price">$24.99</div>
+          <a href="#" class="buy-btn">Add to Cart</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Features Section -->
+  <section class="features">
+    <h2 class="section-title">Why Choose TimeCraft</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>2-Year Warranty</h3>
+        <p>All our watches come with a comprehensive 24-month manufacturer's warranty for your peace of mind.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🚚</div>
+        <h3>Free Shipping</h3>
+        <p>Enjoy free express shipping on all orders over $50, with delivery within 2-3 business days.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">💳</div>
+        <h3>Secure Payment</h3>
+        <p>Shop with confidence using our 256-bit SSL encrypted payment processing system.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">↩️</div>
+        <h3>Easy Returns</h3>
+        <p>Not satisfied? Return within 30 days for a full refund, no questions asked.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-column">
+      <h3>Shop</h3>
+      <ul>
+        <li><a href="#men">Men's Watches</a></li>
+        <li><a href="#women">Women's Watches</a></li>
+        <li><a href="#kids">Kids' Watches</a></li>
+        <li><a href="#collections">All Collections</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-column">
+      <h3>Customer Service</h3>
+      <ul>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">FAQs</a></li>
+        <li><a href="#">Shipping Policy</a></li>
+        <li><a href="#">Returns & Exchanges</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-column">
+      <h3>About TimeCraft</h3>
+      <ul>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Store Locations</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-column">
+      <h3>Connect With Us</h3>
+      <ul>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Twitter</a></li>
+        <li><a href="#">Pinterest</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="copyright">
+    &copy; 2025 TimeCraft Watch Emporium | All rights reserved.
+  </div>
+</footer>
+
+<script>
+  // Watch slideshow images
+  const watchImages = [
+    'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    'https://images.unsplash.com/photo-1539874754764-5a96559165b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    'https://images.unsplash.com/photo-1557531365-e8b22d93dbd0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    'https://images.unsplash.com/photo-1526045431048-f857369baa09?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+  ];
+
+  const slideshowContainer = document.querySelector('.watch-slideshow');
+
+  // Create image elements
+  watchImages.forEach((src, index) => {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = `Luxury Watch ${index + 1}`;
+    if (index === 0) img.classList.add('active');
+    slideshowContainer.appendChild(img);
+  });
+
+  // Animation logic
+  let currentIndex = 0;
+  const images = document.querySelectorAll('.watch-slideshow img');
+
+  function cycleImages() {
+    // Remove active class from current image
+    images[currentIndex].classList.remove('active');
+    
+    // Move to next image
+    currentIndex = (currentIndex + 1) % images.length;
+    
+    // Add active class to new image
+    images[currentIndex].classList.add('active');
+  }
+
+  // Change image every 3 seconds
+  setInterval(cycleImages, 3000);
+
+  // Smooth scrolling for navigation links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      const targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+      
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        window.scrollTo({
+          top: targetElement.offsetTop - 100,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+</script>
+</body>
+</html>
